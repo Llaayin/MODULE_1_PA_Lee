@@ -26,24 +26,53 @@ export function createRoom() {
   leftWall.receiveShadow = true;
   room.add(leftWall);
 
-  const rwTop = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.6, 10), wallMat);
-  rwTop.position.set(5, 2.7, 0);
-  room.add(rwTop);
+  const wallThickness = 0.2;
+  const wallHeight = 3;
+  const wallLength = 10;
+  const wallX = 5;
 
-  const rwBottom = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.8, 10), wallMat);
-  rwBottom.position.set(5, 0.4, 0);
-  room.add(rwBottom);
+  const windowWidth = 6;
+  const windowHeight = 1.6;
+  const windowCenterY = 1.6;
 
-  const rwFront = new THREE.Mesh(new THREE.BoxGeometry(0.2, 1.6, 1.5), wallMat);
-  rwFront.position.set(5, 1.6, 4.25);
-  room.add(rwFront);
+  const sidePanelWidth = (wallLength - windowWidth) / 2;
+  const topPanelHeight = wallHeight - windowCenterY - windowHeight / 2;
+  const bottomPanelHeight = windowCenterY - windowHeight / 2;
 
-  const rwBack = new THREE.Mesh(new THREE.BoxGeometry(0.2, 1.6, 1.5), wallMat);
-  rwBack.position.set(5, 1.6, -4.25);
-  room.add(rwBack);
+  const frontPanel = new THREE.Mesh(
+    new THREE.BoxGeometry(wallThickness, wallHeight, sidePanelWidth),
+    wallMat
+  );
+  frontPanel.position.set(wallX, wallHeight / 2, wallLength / 2 - sidePanelWidth / 2);
+  frontPanel.receiveShadow = true;
+  room.add(frontPanel);
+
+  const backPanel = new THREE.Mesh(
+    new THREE.BoxGeometry(wallThickness, wallHeight, sidePanelWidth),
+    wallMat
+  );
+  backPanel.position.set(wallX, wallHeight / 2, -wallLength / 2 + sidePanelWidth / 2);
+  backPanel.receiveShadow = true;
+  room.add(backPanel);
+
+  const topPanel = new THREE.Mesh(
+    new THREE.BoxGeometry(wallThickness, topPanelHeight, windowWidth),
+    wallMat
+  );
+  topPanel.position.set(wallX, windowCenterY + windowHeight / 2 + topPanelHeight / 2, 0);
+  topPanel.receiveShadow = true;
+  room.add(topPanel);
+
+  const bottomPanel = new THREE.Mesh(
+    new THREE.BoxGeometry(wallThickness, bottomPanelHeight, windowWidth),
+    wallMat
+  );
+  bottomPanel.position.set(wallX, bottomPanelHeight / 2, 0);
+  bottomPanel.receiveShadow = true;
+  room.add(bottomPanel);
 
   const glass = new THREE.Mesh(
-    new THREE.BoxGeometry(0.05, 1.6, 6.5),
+    new THREE.BoxGeometry(0.05, windowHeight, windowWidth),
     new THREE.MeshStandardMaterial({
       color: 0x88ccee,
       transparent: true,
@@ -52,18 +81,26 @@ export function createRoom() {
       metalness: 0.1
     })
   );
-  glass.position.set(5, 1.6, 0);
+  glass.position.set(wallX, windowCenterY, 0);
   room.add(glass);
 
   const frameMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
 
-  const frameV = new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.7, 0.1), frameMat);
-  frameV.position.set(5, 1.6, 0);
+  const frameV = new THREE.Mesh(new THREE.BoxGeometry(0.1, windowHeight + 0.1, 0.1), frameMat);
+  frameV.position.set(wallX, windowCenterY, 0);
   room.add(frameV);
 
-  const frameH = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 6.6), frameMat);
-  frameH.position.set(5, 1.6, 0);
+  const frameH = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, windowWidth + 0.1), frameMat);
+  frameH.position.set(wallX, windowCenterY, 0);
   room.add(frameH);
+
+  const frameTop = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, windowWidth + 0.1), frameMat);
+  frameTop.position.set(wallX, windowCenterY + windowHeight / 2, 0);
+  room.add(frameTop);
+
+  const frameBottom = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, windowWidth + 0.1), frameMat);
+  frameBottom.position.set(wallX, windowCenterY - windowHeight / 2, 0);
+  room.add(frameBottom);
 
   return room;
 }
